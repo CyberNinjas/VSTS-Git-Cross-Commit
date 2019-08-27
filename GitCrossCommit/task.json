@@ -20,20 +20,33 @@
   "instanceNameFormat": "GitCrossCommit $(message)",
   "inputs": [
     {
-      "name": "cwd",
-      "type": "filePath",
-      "label": "Working Directory",
+      "name": "repoUrl",
+      "type": "string",
+      "label": "Target Git Repository URL",
       "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "Current working directory when GitCrossCommit is run."
+      "required": true,
+      "helpMarkDown": "The Git Repository URL to clone and commit the artifact to."
     },
     {
-      "name": "msg",
-      "type": "string",
-      "label": "Message",
-      "defaultValue": "Hello World",
-      "required": true,
-      "helpMarkDown": "Message to echo out"
+      "name": "repoPath",
+      "type": "filePath",
+      "label": "The local file path where the git repository should be cloned.",
+      "defaultValue": "",
+      "required": false
+    },
+    {
+      "name": "sourcePath",
+      "type": "filePath",
+      "label": "The local file path to the artifact that should be copied.",
+      "defaultValue": "",
+      "required": false
+    },
+    {
+      "name": "destinationPath",
+      "type": "filePath",
+      "label": "The file path where the artifact should be copied to, relative to repoURL",
+      "defaultValue": "",
+      "required": false
     }
   ],
   "execution": {

@@ -4,8 +4,19 @@ const lib               =   require('./lib');
 
 var echo = new tl.ToolRunner(tl.which('echo', true));
 
-var msg = tl.getInput('msg', true);
-echo.arg(msg);
+var repoUrl = tl.getInput('repoUrl', true);
+echo.arg(repoUrl);
+
+var repoPath = tl.getInput('repoPath', true);
+echo.arg(repoPath);
+
+var sourcePath = tl.getInput('sourcePath', true);
+echo.arg(sourcePath);
+
+var destinationPath = tl.getInput('destinationPath', true);
+echo.arg(destinationPath);
+
+
 
 var cwd = tl.getPathInput('cwd', false);
 
