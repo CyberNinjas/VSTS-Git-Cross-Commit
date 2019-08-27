@@ -1,4 +1,5 @@
 .idea
+*.vsix
 # Logs
 logs
 *.log
