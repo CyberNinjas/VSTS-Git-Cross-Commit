@@ -1,5 +1,5 @@
-const q              =   require('q');
-
+const q                 =   require('q');
+const exec              = require('child_process').exec;
 
 /**
  * execCommand - Promisifies the "exec" command

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit#readme",
   "dependencies": {
+    "child-process": "^1.0.2",
     "q": "^1.5.1",
     "vso-task-lib": "^0.5.5"
   }
