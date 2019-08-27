@@ -17,7 +17,7 @@
         "default": "images/icon.png"
     },
     "categories": [
-        "Build and release"
+        "Azure Pipelines"
     ],
     "tags": [
         "build",
