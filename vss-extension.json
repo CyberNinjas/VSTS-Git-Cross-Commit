@@ -14,7 +14,7 @@
         }
     ],
     "icons": {
-        "default": "GitCrossCommit/icon.png"
+        "default": "images/icon.png"
     },
     "categories": [
         "Build and release"
