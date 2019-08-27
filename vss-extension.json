@@ -48,9 +48,6 @@
             "path": "GitCrossCommit"
         },
         {
-            "path": "node_modules"
-        },
-        {
             "path": "images",
             "addressable": true
         }
