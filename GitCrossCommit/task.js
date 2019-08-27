@@ -9,7 +9,6 @@ const repoPath = tl.getInput('repoPath', true) ? tl.getInput('repoPath', true) :
 const sourcePath = tl.getInput('sourcePath', true);
 const destinationPath = tl.getInput('destinationPath', true);
 
-console.log("TEST");
 console.log(process.env);
 lib.execCommand('git clone ' + repoUrl ).then(function(results){
     console.log(results);
