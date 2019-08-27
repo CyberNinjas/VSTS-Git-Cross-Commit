@@ -1,0 +1,27 @@
+{
+  "name": "vsts-git-cross-commit",
+  "version": "1.0.0",
+  "description": "VSTS Custom Task for committing a build artifact to a 2nd Git repository.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CyberNinjas/VSTS-Git-Cross-Commit.git"
+  },
+  "keywords": [
+    "build",
+    "git"
+  ],
+  "author": "Doug Logan",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit/issues"
+  },
+  "homepage": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit#readme",
+  "dependencies": {
+    "q": "^1.5.1",
+    "vso-task-lib": "^0.5.5"
+  }
+}
