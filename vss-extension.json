@@ -5,29 +5,69 @@
     "name": "Git-Cross-Commit",
     "description": "VSTS Custom Task for committing a build artifact to a 2nd Git repository.",
     "publisher": "Cyber-Ninjas",
+    "galleryFlags": [
+        "Private"
+    ],
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
     "icons": {
-        "default": "icon.png"
+        "default": "GitCrossCommit/icon.png"
+    },
+    "categories": [
+        "Build and release"
+    ],
+    "tags": [
+        "build",
+        "git"
+    ],
+    "content": {
+        "details": {
+            "path": "README.md"
+        },
+        "license": {
+            "path": "LICENSE"
+        }
     },
     "contributions": [
         {
-            "id": "HelloBuildTask",
+            "id": "f8f54430-c86b-11e9-888a-97daa5f7b82e",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "buildtask"
+                "name": "GitCrossCommit"
             }
         }
     ],
     "files": [
         {
-            "path": "buildtask"
+            "path": "GitCrossCommit"
+        },
+        {
+            "path": "images",
+            "addressable": true
         }
-    ]
+    ],
+    "links": {
+        "learn": {
+            "uri": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit/blob/master/README.md"
+        },
+        "repository": {
+            "uri": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit.git"
+        },
+        "license": {
+            "uri": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit/blob/master/LICENSE"
+        },
+        "issues": {
+            "uri": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit/issues"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/CyberNinjas/VSTS-Git-Cross-Commit.git"
+    }
 }
