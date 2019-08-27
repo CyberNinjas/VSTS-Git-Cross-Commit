@@ -1,3 +1,6 @@
+const q              =   require('q');
+
+
 /**
  * execCommand - Promisifies the "exec" command
  * @param command - String - The command
@@ -44,7 +47,8 @@ module.exports.execCommands = function(commands, settings){
 
 function logData(data, level){
     "use strict";
-    var logLevel = (parseInt(process.env.SYSTEM_DEBUG_LEVEL)) ? parseInt(process.env.SYSTEM_DEBUG_LEVEL) : 0;
+    let logLevel = (parseInt(process.env.SYSTEM_DEBUG_LEVEL)) ? parseInt(process.env.SYSTEM_DEBUG_LEVEL) : 0;
+    logLevel = (process.env.SYSTEM_DEBUG) ? 10 : logLevel;
 
     if(logLevel >= level){
         console.log(data);
