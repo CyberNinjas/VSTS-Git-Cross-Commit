@@ -11,18 +11,12 @@ const destinationPath = tl.getInput('destinationPath', true);
 
 console.log(process.env);
 lib.execCommand('git clone ' + repoUrl ).then(function(results){
-    console.log(results);
+    console.log("Success:");
+    console.log(results.stdout);
 }).catch(function(error){
+    console.log("Error:");
     console.log(error.message);
 });
-
-
-
-
-
-
-
-
 
 echo.exec({ failOnStdErr: false})
 .then(function(code) {
