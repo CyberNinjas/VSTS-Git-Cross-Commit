@@ -41,3 +41,12 @@ module.exports.execCommands = function(commands, settings){
     });
     return result;
 }
+
+function logData(data, level){
+    "use strict";
+    var logLevel = (parseInt(process.env.SYSTEM_DEBUG_LEVEL)) ? parseInt(process.env.SYSTEM_DEBUG_LEVEL) : 0;
+
+    if(logLevel >= level){
+        console.log(data);
+    }
+}
