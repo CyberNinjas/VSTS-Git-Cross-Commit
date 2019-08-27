@@ -2,27 +2,26 @@ const path              =   require('path');
 const tl                =   require('vso-task-lib');
 const lib               =   require('./lib');
 
-var echo = new tl.ToolRunner(tl.which('echo', true));
+const echo = new tl.ToolRunner(tl.which('echo', true));
 
-var repoUrl = tl.getInput('repoUrl', true);
-echo.arg(repoUrl);
+const repoUrl = tl.getInput('repoUrl', true);
+const repoPath = tl.getInput('repoPath', true) ? tl.getInput('repoPath', true) : "";
+const sourcePath = tl.getInput('sourcePath', true);
+const destinationPath = tl.getInput('destinationPath', true);
 
-var repoPath = tl.getInput('repoPath', true);
-echo.arg(repoPath);
-
-var sourcePath = tl.getInput('sourcePath', true);
-echo.arg(sourcePath);
-
-var destinationPath = tl.getInput('destinationPath', true);
-echo.arg(destinationPath);
-
+lib.execCommand('git clone ' + repoUrl ).then(function(results){
+    console.log(results);
+}).catch(function(error){
+    console.log(error.message);
+});
 
 
-var cwd = tl.getPathInput('cwd', false);
 
-// will error and fail task if it doesn't exist
-tl.checkPath(cwd, 'cwd');
-tl.cd(cwd);
+
+
+
+
+
 
 echo.exec({ failOnStdErr: false})
 .then(function(code) {
