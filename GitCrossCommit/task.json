@@ -43,7 +43,7 @@
     },
     {
       "name": "destinationPath",
-      "type": "filePath",
+      "type": "string",
       "label": "The file path where the artifact should be copied to, relative to repoURL",
       "defaultValue": "",
       "required": false

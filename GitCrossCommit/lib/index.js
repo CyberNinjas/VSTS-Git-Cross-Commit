@@ -1,5 +1,32 @@
 const q                 =   require('q');
-const exec              = require('child_process').exec;
+const exec              =   require('child_process').exec;
+
+
+/**
+ * replaceVariables - Cycles through the string and replaces variable references with their values.
+ * @param stringInput - Original string input
+ * @returns - Resolve - The updated string
+ *            Reject  - The error
+ */
+module.exports.replaceVariables= function(stringInput){
+    let result = /\$\(\$([^)]+)\)/g.exec(stringInput);
+    while( result !== null) {
+        const variableName = result[1].replace(/\./g,"_");
+        const variableValue = (process.env[variableName]) ? process.env[variableName] :  "";
+        stringInput = stringInput.replace( new RegExp(escapeRegExp(result[0]), "g"), variableValue);
+        result = /\$\(\$([^)]+)\)/g.exec(stringInput);
+    }
+    return stringInput;
+};
+
+/**
+ * escapeRegExp - Escapes any characters that have a special meaning in a regex.
+ * @param text - Input non-escaped String
+ * @returns - Updated string with all regex characters escaped.
+ */
+function escapeRegExp(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
 
 /**
  * execCommand - Promisifies the "exec" command
