@@ -1,5 +1,6 @@
-var path = require('path');
-var tl = require('vso-task-lib');
+const path              =   require('path');
+const tl                =   require('vso-task-lib');
+const lib               =   require('./lib');
 
 var echo = new tl.ToolRunner(tl.which('echo', true));
 
