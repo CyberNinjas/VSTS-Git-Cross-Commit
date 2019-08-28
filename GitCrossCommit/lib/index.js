@@ -13,7 +13,7 @@ module.exports.cloneGitRepo = function(tl){
     let repoBranch = replaceVariables(tl.getInput('repoBranch', false) ? tl.getInput('repoBranch', false) : "master");
 
     execCommand('git init ' + repoPath, {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(results){
-        const commands = [  'git remote add origin' + repoUrl,
+        const commands = [  'git remote add origin ' + repoUrl,
                             'git config gc.auto 0',
                             'git config --get-all http.' + repoUrl + ".extraheader",
                             'git config --get-all http.proxy',
