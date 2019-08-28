@@ -12,7 +12,7 @@ module.exports.cloneGitRepo = function(tl){
     let repoPath = replaceVariables(tl.getInput('repoPath', false) ? tl.getInput('repoPath', false) : "GitCrossCommit");
     let repoBranch = replaceVariables(tl.getInput('repoBranch', false) ? tl.getInput('repoBranch', false) : "master");
 
-    execCommand('git init ' + repoPath, {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(results){
+    execCommands(['rm -fr ' + repoPath, 'git init ' + repoPath ], {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(results){
         const commands = [  'git remote add origin ' + repoUrl,
                             'git config gc.auto 0',
                             'git config --get-all http.' + repoUrl + ".extraheader",
