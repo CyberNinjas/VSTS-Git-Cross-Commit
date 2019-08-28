@@ -15,11 +15,9 @@ module.exports.cloneGitRepo = function(tl){
     execCommands(['rm -fr ' + repoPath, 'git init ' + repoPath ], {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(results){
         const commands = [  'git remote add origin ' + repoUrl,
                             'git config gc.auto 0',
-                            'git config --get-all http.' + repoUrl + ".extraheader",
-                            'git config --get-all http.proxy',
-                            'git -c http.extraheader="AUTHORIZATION: bearer ' + process.env.SYSTEM_ACCESSTOKEN + '" fetch --force --tags --prune --progress --no-recurse-submodules origin',
-                            'git checkout ' + repoBranch,
-                            'git config http.'+ repoUrl +'.extraheader "AUTHORIZATION: bearer '+ process.env.SYSTEM_ACCESSTOKEN + '"'
+                            'git config --add http.extraheader "AUTHORIZATION: bearer ' + process.env.SYSTEM_ACCESSTOKEN +'"',
+                            'git pull origin ' + repoBranch,
+                            'git checkout ' + repoBranch
                         ];
         execCommands(commands, {cwd: path.join(process.env.BUILD_SOURCESDIRECTORY, repoPath)}).then(function(output){
             const folderMatches = /Cloning\s+into\s+'([^']+)'/.exec(output.stderr);
