@@ -37,7 +37,7 @@
     },
     {
       "name": "repoPath",
-      "type": "filePath",
+      "type": "string",
       "label": "The local file path where the git repository should be cloned.",
       "defaultValue": "",
       "required": false
