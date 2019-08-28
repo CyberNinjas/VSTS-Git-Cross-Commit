@@ -26,13 +26,10 @@ module.exports.cloneGitRepo = function(tl){
             repoPath = folderMatches[1];
             deferred.resolve({ success: true, repoPath: repoPath });
         }).catch(function(object){
-            deferred.reject(object.error);
+            deferred.reject(object);
         });
     }).catch(function(object){
-        if(object.error)
-            deferred.reject(object.error);
-        else
-            deferred.reject(error);
+        deferred.reject(object);
     });
 
 

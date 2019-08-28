@@ -10,7 +10,7 @@ lib.cloneGitRepo(tl).then(lib.copyArtifacts.bind(this,tl), handleError).then(lib
 }).catch(handleError);
 
 function handleError(error){
-    console.error(error.message);
+    console.error(JSON.stringify(error, Object.getOwnPropertyNames(err)));
     tl.debug('taskRunner fail');
     tl.exit(1);
 }
