@@ -1,5 +1,70 @@
 const q                 =   require('q');
+const fs                =   require('fs-extra');
+const path              =   require('path');
 const exec              =   require('child_process').exec;
+
+const _this = this;
+
+module.exports.cloneGitRepo = function(tl){
+    const deferred = q.defer();
+    const echo = new tl.ToolRunner(tl.which('echo', true));
+    const repoUrl = replaceVariables(tl.getInput('repoUrl', true));
+    let repoPath = replaceVariables(tl.getInput('repoPath', false) ? tl.getInput('repoPath', false) : "");
+
+    execCommand('git clone ' + repoUrl + ' ' + repoPath, {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(output){
+        const folderMatches = /Cloning\s+into\s+'([^']+)'/.exec(output.stderr);
+        repoPath = folderMatches[1];
+        deferred.resolve({ success: true, repoPath: repoPath });
+    }).catch(function(object){
+        deferred.reject(object.error);
+    });
+
+    return deferred.promise;
+};
+
+module.exports.copyArtifacts = function(tl, gitResults){
+    const deferred = q.defer();
+    const copyFile =   q.denodeify(fs.copy);
+    const echo = new tl.ToolRunner(tl.which('echo', true));
+    const repoFilePath = path.join(process.env.BUILD_SOURCESDIRECTORY, gitResults.repoPath);
+
+    let sourcePath = replaceVariables(tl.getInput('sourcePath', false) ? tl.getInput('sourcePath', false) : "");
+    let destinationPath = replaceVariables(tl.getInput('destinationPath', false) ? tl.getInput('destinationPath', false) : "");
+
+    if(sourcePath && destinationPath){
+
+        sourcePath = path.join(process.env.BUILD_SOURCESDIRECTORY, sourcePath);
+        destinationPath = path.join(repoFilePath, destinationPath);
+        copyFile(sourcePath, destinationPath).then(function(results){
+            deferred.resolve({ success: true, repoFilePath: repoFilePath, artifactPath: destinationPath });
+        }).catch(function(error){
+            deferred.reject(error);
+        });
+    } else {
+        echo.arg("SKIPPING COPY: sourcePath or destinationPath not set");
+        deferred.resolve({ success: true, repoFilePath: repoFilePath, artifactPath: null });
+    }
+
+    return deferred.promise;
+};
+
+module.exports.commitToRepo = function(tl, artifactResults){
+    let repoBranch = replaceVariables(tl.getInput('repoBranch', false) ? tl.getInput('repoBranch', false) : "master");
+    let commitMessage = replaceVariables((tl.getInput('commitMessage', false)) ? tl.getInput('commitMessage', false): "Committing build $($BUILD.VERSION)");
+
+    if(artifactResults.artifactPath){
+        const commands = [
+            'git checkout ' + repoBranch,
+            'git add ' + artifactResults.artifactPath,
+            'git commit --message="' + commitMessage + '"',
+            'git push'
+        ];
+
+        return execCommands(commands, { cwd: artifactResults.repoFilePath })
+    } else {
+        return q(true);
+    }
+};
 
 
 /**
@@ -8,7 +73,7 @@ const exec              =   require('child_process').exec;
  * @returns - Resolve - The updated string
  *            Reject  - The error
  */
-module.exports.replaceVariables= function(stringInput){
+function replaceVariables(stringInput){
     let result = /\$\(\$([^)]+)\)/g.exec(stringInput);
     while( result !== null) {
         const variableName = result[1].replace(/\./g,"_");
@@ -35,7 +100,7 @@ function escapeRegExp(text) {
  * @returns {promise} - Resolve - On Success - Object {command: command, settings: settings, error: error, stdout: stdout, stderr: stderr}
  *                      Reject - On Failure - Object {command: command, settings: settings, error: error, stdout: stdout, stderr: stderr}
  */
-module.exports.execCommand = function(command, settings){
+function execCommand(command, settings){
     logData("Start execCommand", 1);
     var deferred = q.defer();
     logData("Executing the command:" + command, 3);
@@ -57,7 +122,7 @@ module.exports.execCommand = function(command, settings){
  * @returns {promise} - Resolve - Last command {command: command, settings: settings, error: error, stdout: stdout, stderr: stderr}
  *                      Reject  - {command: command, settings: settings, error: error, stdout: stdout, stderr: stderr}
  */
-module.exports.execCommands = function(commands, settings){
+function execCommands(commands, settings){
     logData("Start ExecCommands", 1);
     var results = [];
     if(typeof commands === 'string')

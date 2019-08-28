@@ -28,6 +28,14 @@
       "helpMarkDown": "The Git Repository URL to clone and commit the artifact to."
     },
     {
+      "name": "repoBranch",
+      "type": "string",
+      "label": "Target Git Repository Branch",
+      "defaultValue": "master",
+      "required": true,
+      "helpMarkDown": "The Git Repository branch to commit the artifact to."
+    },
+    {
       "name": "repoPath",
       "type": "filePath",
       "label": "The local file path where the git repository should be cloned.",
@@ -47,6 +55,14 @@
       "label": "The file path where the artifact should be copied to, relative to repoURL",
       "defaultValue": "",
       "required": false
+    },
+    {
+      "name": "commitMessage",
+      "type": "string",
+      "label": "The message to utilize when committing the file",
+      "defaultValue": "Committing build $($BUILD.VERSION)",
+      "required": true,
+      "helpMarkDown": "The message to use when committing the artifacts."
     }
   ],
   "execution": {
