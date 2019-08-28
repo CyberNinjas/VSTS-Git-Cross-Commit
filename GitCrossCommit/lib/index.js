@@ -9,15 +9,32 @@ module.exports.cloneGitRepo = function(tl){
     const deferred = q.defer();
     const echo = new tl.ToolRunner(tl.which('echo', true));
     const repoUrl = replaceVariables(tl.getInput('repoUrl', true));
-    let repoPath = replaceVariables(tl.getInput('repoPath', false) ? tl.getInput('repoPath', false) : "");
+    let repoPath = replaceVariables(tl.getInput('repoPath', false) ? tl.getInput('repoPath', false) : "GitCrossCommit");
+    let repoBranch = replaceVariables(tl.getInput('repoBranch', false) ? tl.getInput('repoBranch', false) : "master");
 
-    execCommand('git clone ' + repoUrl + ' ' + repoPath, {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(output){
-        const folderMatches = /Cloning\s+into\s+'([^']+)'/.exec(output.stderr);
-        repoPath = folderMatches[1];
-        deferred.resolve({ success: true, repoPath: repoPath });
+    execCommand('git init ' + repoPath, {cwd: process.env.BUILD_SOURCESDIRECTORY}).then(function(results){
+        const commands = [  'git remote add origin' + repoUrl,
+                            'git config gc.auto 0',
+                            'git config --get-all http.' + repoUrl + ".extraheader",
+                            'git config --get-all http.proxy',
+                            'git -c http.extraheader="AUTHORIZATION: bearer ' + process.env.SYSTEM_ACCESSTOKEN + '" fetch --force --tags --prune --progress --no-recurse-submodules origin',
+                            'git checkout ' + repoBranch,
+                            'git config http.'+ repoUrl +'.extraheader "AUTHORIZATION: bearer '+ process.env.SYSTEM_ACCESSTOKEN + '"'
+                        ];
+        execCommands(commands, {cwd: path.join(process.env.BUILD_SOURCESDIRECTORY, repoPath)}).then(function(output){
+            const folderMatches = /Cloning\s+into\s+'([^']+)'/.exec(output.stderr);
+            repoPath = folderMatches[1];
+            deferred.resolve({ success: true, repoPath: repoPath });
+        }).catch(function(object){
+            deferred.reject(object.error);
+        });
     }).catch(function(object){
-        deferred.reject(object.error);
+        if(object.error)
+            deferred.reject(object.error);
+        else
+            deferred.reject(error);
     });
+
 
     return deferred.promise;
 };
@@ -49,12 +66,10 @@ module.exports.copyArtifacts = function(tl, gitResults){
 };
 
 module.exports.commitToRepo = function(tl, artifactResults){
-    let repoBranch = replaceVariables(tl.getInput('repoBranch', false) ? tl.getInput('repoBranch', false) : "master");
     let commitMessage = replaceVariables((tl.getInput('commitMessage', false)) ? tl.getInput('commitMessage', false): "Committing build $($BUILD.VERSION)");
 
     if(artifactResults.artifactPath){
         const commands = [
-            'git checkout ' + repoBranch,
             'git add ' + artifactResults.artifactPath,
             'git commit --message="' + commitMessage + '"',
             'git push'
