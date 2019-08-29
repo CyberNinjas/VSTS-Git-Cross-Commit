@@ -116,7 +116,6 @@ function execCommand(command, settings){
     logData("Executing the command:" + command, 3);
     exec(command, settings, function(error, stdout, stderr) {
         if (error) {
-            logData("Error:" + JSON.stringify(error, Object.getOwnPropertyNames(error)), 5);
             deferred.reject({command: command, settings: settings, error: error, stdout: stdout, stderr: stderr})
         } else {
             deferred.resolve({command: command, settings: settings, error: error, stdout: stdout, stderr: stderr})
