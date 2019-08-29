@@ -64,9 +64,13 @@ module.exports.copyArtifacts = function(tl, gitResults){
 module.exports.commitToRepo = function(tl, artifactResults){
     logData("Starting commitToRepo...", 1);
     let commitMessage = replaceVariables((tl.getInput('commitMessage', false)) ? tl.getInput('commitMessage', false): "Committing build $($BUILD.VERSION)");
+    let commitUser = replaceVariables((tl.getInput('commitUser', false)) ? tl.getInput('commitUser', false): "$($BUILD.REQUESTEDFOR)");
+    let commitEmail = replaceVariables((tl.getInput('commitEmail', false)) ? tl.getInput('commitEmail', false): "$($BUILD.REQUESTEDFOREMAIL)");
 
     if(artifactResults.artifactPath){
         const commands = [
+            'git config --global user.email "' + commitEmail + '"',
+            'git config --global user.name "' + commitUser + '"',
             'git add ' + artifactResults.artifactPath,
             'git commit --message="' + commitMessage + '"',
             'git push --set-upstream origin master'
