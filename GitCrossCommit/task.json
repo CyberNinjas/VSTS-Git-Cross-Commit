@@ -68,7 +68,7 @@
       "name": "commitEmail",
       "type": "string",
       "label": "The email to utilize on the git commit",
-      "defaultValue": "$($$BUILD.REQUESTEDFOREMAIL)",
+      "defaultValue": "$($BUILD.REQUESTEDFOREMAIL)",
       "required": true,
       "helpMarkDown": "The message to use when committing the artifacts."
     },
