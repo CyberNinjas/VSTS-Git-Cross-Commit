@@ -96,6 +96,8 @@ function replaceVariables(stringInput){
           variableValue = process.env[variableName];
         }  else {
             logData("WARNING: A variableName of " + variableName + " was used within '" + stringInput + "', but no ENV exists with that value. It will be blanked out.", 0);
+            logData("ENV Variables:" , 10);
+            logData(JSON.stringify(process.env) , 10);
         }
         stringInput = stringInput.replace( new RegExp(escapeRegExp(result[0]), "g"), variableValue);
         result = /\$\(\$([^)]+)\)/g.exec(stringInput);
