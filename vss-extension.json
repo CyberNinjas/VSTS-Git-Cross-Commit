@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "GitCrossCommit",
-    "version": "1.0.17",
+    "version": "1.0.19",
     "name": "Git-Cross-Commit",
     "description": "VSTS Custom Task for committing a build artifact to a 2nd Git repository.",
     "publisher": "Cyber-Ninjas",
