@@ -47,8 +47,6 @@ module.exports.copyArtifacts = function(tl, gitResults){
     logData("destinationPath: " +destinationPath , 5);
 
     if(sourcePath && destinationPath){
-
-        sourcePath = path.join(process.env.BUILD_SOURCESDIRECTORY, sourcePath);
         destinationPath = path.join(repoFilePath, destinationPath);
         copyFile(sourcePath, destinationPath).then(function(results){
             deferred.resolve({ success: true, repoFilePath: repoFilePath, artifactPath: destinationPath });
