@@ -69,7 +69,7 @@ module.exports.commitToRepo = function(tl, artifactResults){
         const commands = [
             'git add ' + artifactResults.artifactPath,
             'git commit --message="' + commitMessage + '"',
-            'git push'
+            'git push --set-upstream origin master'
         ];
 
         return execCommands(commands, { cwd: artifactResults.repoFilePath })
