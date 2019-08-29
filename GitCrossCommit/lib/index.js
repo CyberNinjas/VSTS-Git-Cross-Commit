@@ -6,6 +6,7 @@ const exec              =   require('child_process').exec;
 const _this = this;
 
 module.exports.cloneGitRepo = function(tl){
+    logData("Starting cloneGitRepo...", 1);
     const deferred = q.defer();
     const echo = new tl.ToolRunner(tl.which('echo', true));
     const repoUrl = replaceVariables(tl.getInput('repoUrl', true));
@@ -33,6 +34,7 @@ module.exports.cloneGitRepo = function(tl){
 };
 
 module.exports.copyArtifacts = function(tl, gitResults){
+    logData("Starting copyArtifacts...", 1);
     const deferred = q.defer();
     const copyFile =   q.denodeify(fs.copy);
     const echo = new tl.ToolRunner(tl.which('echo', true));
@@ -40,6 +42,9 @@ module.exports.copyArtifacts = function(tl, gitResults){
 
     let sourcePath = replaceVariables(tl.getInput('sourcePath', false) ? tl.getInput('sourcePath', false) : "");
     let destinationPath = replaceVariables(tl.getInput('destinationPath', false) ? tl.getInput('destinationPath', false) : "");
+
+    logData("sourcePath: " +sourcePath , 5);
+    logData("destinationPath: " +destinationPath , 5);
 
     if(sourcePath && destinationPath){
 
@@ -51,7 +56,7 @@ module.exports.copyArtifacts = function(tl, gitResults){
             deferred.reject(error);
         });
     } else {
-        echo.arg("SKIPPING COPY: sourcePath or destinationPath not set");
+        logData("SKIPPING COPY: sourcePath or destinationPath not set", 0);
         deferred.resolve({ success: true, repoFilePath: repoFilePath, artifactPath: null });
     }
 
@@ -59,6 +64,7 @@ module.exports.copyArtifacts = function(tl, gitResults){
 };
 
 module.exports.commitToRepo = function(tl, artifactResults){
+    logData("Starting commitToRepo...", 1);
     let commitMessage = replaceVariables((tl.getInput('commitMessage', false)) ? tl.getInput('commitMessage', false): "Committing build $($BUILD.VERSION)");
 
     if(artifactResults.artifactPath){
@@ -85,7 +91,12 @@ function replaceVariables(stringInput){
     let result = /\$\(\$([^)]+)\)/g.exec(stringInput);
     while( result !== null) {
         const variableName = result[1].replace(/\./g,"_");
-        const variableValue = (process.env[variableName]) ? process.env[variableName] :  "";
+        let variableValue = "";
+        if(process.env[variableName]){
+          variableValue = process.env[variableName];
+        }  else {
+            logData("WARNING: A variableName of " + variableName + " was used within '" + stringInput + "', but no ENV exists with that value. It will be blanked out.", 0);
+        }
         stringInput = stringInput.replace( new RegExp(escapeRegExp(result[0]), "g"), variableValue);
         result = /\$\(\$([^)]+)\)/g.exec(stringInput);
     }
