@@ -20,8 +20,6 @@ module.exports.cloneGitRepo = function(tl){
                             'git checkout ' + repoBranch
                         ];
         execCommands(commands, {cwd: path.join(process.env.BUILD_SOURCESDIRECTORY, repoPath)}).then(function(output){
-            const folderMatches = /Cloning\s+into\s+'([^']+)'/.exec(output.stderr);
-            repoPath = folderMatches[1];
             deferred.resolve({ success: true, repoPath: repoPath });
         }).catch(function(object){
             deferred.reject(object);
